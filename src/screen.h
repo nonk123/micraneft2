@@ -22,6 +22,3 @@ void pxCleanup();
 
 struct pixel* px(size_t);
 struct pixel* pxAt(int, int);
-
-int pxRows();
-int pxCols();

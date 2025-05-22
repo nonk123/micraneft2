@@ -16,7 +16,7 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmd
         for (size_t i = 0; i < SCREEN_MAX; i++)
             px(i)->txt = ' ';
         pxInput();
-        if (gDummyX >= 0 && gDummyY >= 0 && gDummyX < pxCols() && gDummyY < pxRows())
+        if (gDummyX >= 0 && gDummyY >= 0 && gDummyX < gCols && gDummyY < gRows)
             pxAt(gDummyX, gDummyY)->txt = '@';
 
         pxCommit();

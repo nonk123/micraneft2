@@ -9,8 +9,6 @@
 
 static char title[TITLE_MAX];
 static struct pixel fBuf[SCREEN_MAX], bBuf[SCREEN_MAX];
-
-static int rows = 0, cols = 0;
 static int lastX, lastY;
 
 static HANDLE stdInput = NULL, stdOutput = NULL;
@@ -18,8 +16,8 @@ static HANDLE stdInput = NULL, stdOutput = NULL;
 static void updateDimensions() {
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     GetConsoleScreenBufferInfo(stdOutput, &csbi);
-    cols = csbi.srWindow.Right - csbi.srWindow.Left + 1;
-    rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
+    gCols = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+    gRows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
 }
 
 static void cursorTo(int x, int y) {
@@ -98,9 +96,9 @@ static int pxsSame(struct pixel a, struct pixel b) {
 static void displayFPS() {
 #define BUF_MAX (512)
     static char buf[BUF_MAX] = {0};
-    sprintf(buf, "%d (%dx%d)", gCurFPS, rows, cols);
+    sprintf(buf, "%d (%dx%d)", gCurFPS, gRows, gCols);
     for (size_t i = 0; i < BUF_MAX; i++) {
-        if (buf[i] && i < cols) {
+        if (buf[i] && i < gCols) {
             pxAt(i, 0)->txt = buf[i];
             pxAt(i, 0)->bg = C_BLACK;
             pxAt(i, 0)->fg = C_WHITE;
@@ -116,9 +114,9 @@ void pxCommit() {
 
     SetConsoleTitle(title);
 
-    const size_t lastArea = rows * cols;
+    const size_t lastArea = gRows * gCols;
     updateDimensions();
-    if (rows * cols != lastArea) {
+    if (gRows * gCols != lastArea) {
         clearFbuf(); // TODO: work around?
         trashBbuf();
     }
@@ -136,9 +134,9 @@ void pxCommit() {
     lastY = 0;
     DWORD dummy;
 
-    for (int y = 0; y < rows; y++)
-        for (int x = 0; x < cols; x++) {
-            const size_t i = y * cols + x;
+    for (int y = 0; y < gRows; y++)
+        for (int x = 0; x < gCols; x++) {
+            const size_t i = y * gCols + x;
             if (pxsSame(fBuf[i], bBuf[i]))
                 continue;
             cursorTo(x, y);
@@ -167,13 +165,5 @@ struct pixel* px(size_t idx) {
 }
 
 struct pixel* pxAt(int x, int y) {
-    return px(y * cols + x);
-}
-
-int pxRows() {
-    return rows;
-}
-
-int pxCols() {
-    return cols;
+    return px(y * gCols + x);
 }
