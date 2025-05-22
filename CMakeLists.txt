@@ -29,3 +29,6 @@ target_include_directories(noise PUBLIC ${noise_SOURCE_DIR})
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 target_link_libraries(${PROJECT_NAME} PRIVATE noise)
 target_include_directories(${PROJECT_NAME} PRIVATE ${SRC_DIR})
+target_compile_definitions(${PROJECT_NAME} PRIVATE _CRT_SECURE_NO_WARNINGS=1)
+# TODO: make cross-platform
+target_link_options(${PROJECT_NAME} PRIVATE user32.lib /SUBSYSTEM:WINDOWS)
