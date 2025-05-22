@@ -20,9 +20,9 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmd
         pxInput();
 
         gDummyY += kDown(KP_2) - kDown(KP_8);
-        gDummyY = CLAMP(gDummyY, 0, gRows);
+        gDummyY = CLAMP(gDummyY, 0, gRows - 1);
         gDummyX += kDown(KP_6) - kDown(KP_4);
-        gDummyX = CLAMP(gDummyX, 0, gCols);
+        gDummyX = CLAMP(gDummyX, 0, gCols - 1);
 
         pxAt(gDummyX, gDummyY)->txt = '@';
         pxAt(gDummyX, gDummyY)->fg = C_BRIGHT_WHITE;
