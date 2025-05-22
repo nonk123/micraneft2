@@ -10,6 +10,7 @@ VAR(int, Exit, 0);
 VAR(int, TargetFPS, 60);
 VAR(int, CurFPS, 60);
 VAR(int, DisplayFPS, 1);
+VAR(int, ExitOnEsc, 1);
 
 VAR(int, DummyX, 8);
 VAR(int, DummyY, 8);

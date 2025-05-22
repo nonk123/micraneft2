@@ -7,9 +7,12 @@
 #include "g.h"
 #include "screen.h"
 
+#define KBD_SIZE (32 / sizeof(uint32_t))
+
 static char title[TITLE_MAX];
 static struct pixel fBuf[SCREEN_MAX], bBuf[SCREEN_MAX];
 static int lastX, lastY;
+static uint32_t kbd[KBD_SIZE], lastKbd[KBD_SIZE];
 
 static HANDLE stdInput = NULL, stdOutput = NULL;
 
@@ -57,9 +60,15 @@ void pxInit() {
     SetConsoleMode(stdOutput, 0);
 
     updateDimensions();
+
+    for (size_t i = 0; i < KBD_SIZE; i++)
+        kbd[i] = lastKbd[i] = 0;
 }
 
 void pxInput() {
+    for (size_t i = 0; i < KBD_SIZE; i++)
+        lastKbd[i] = kbd[i];
+
     DWORD count = 0;
     GetNumberOfConsoleInputEvents(stdInput, &count);
     if (!count)
@@ -71,21 +80,22 @@ void pxInput() {
 #undef INPUT_MAX
 
     for (size_t i = 0; i < count; i++) {
-        // TODO TODO TODO...
         if (records[i].EventType == KEY_EVENT) {
             KEY_EVENT_RECORD event = records[i].Event.KeyEvent;
             WORD scancode = event.wVirtualScanCode;
-            if (scancode == 1) // exit on ESC - TODO: remove
+            if (gExitOnEsc && scancode == K_ESC)
                 gExit = 1;
-            if (scancode == 0x48)
-                gDummyY--;
-            if (scancode == 0x50)
-                gDummyY++;
-            if (scancode == 0x4b)
-                gDummyX--;
-            if (scancode == 0x4d)
-                gDummyX++;
+
+            if (scancode >= 0 && scancode <= 256) {
+                const int kIdx = scancode / 32, bIdx = scancode % 32;
+                if (event.bKeyDown)
+                    kbd[kIdx] |= 1 << bIdx;
+                else
+                    kbd[kIdx] &= ~(1 << bIdx);
+            }
         }
+
+        // TODO: mouse events.
     }
 }
 
@@ -166,4 +176,24 @@ struct pixel* px(size_t idx) {
 
 struct pixel* pxAt(int x, int y) {
     return px(y * gCols + x);
+}
+
+// Intentional `return 1`/`return 0`s:
+
+int kUp(int code) {
+    if (kbd[code / 32] & (1 << (code % 32)))
+        return 0;
+    return 1;
+}
+
+int kDown(int code) {
+    if (kbd[code / 32] & (1 << (code % 32)))
+        return 1;
+    return 0;
+}
+
+int kPressed(int code) {
+    if (lastKbd[code / 32] & (1 << (code % 32)))
+        return 0;
+    return kDown(code);
 }

@@ -4,6 +4,8 @@
 #include "g.h"
 #include "screen.h"
 
+#define CLAMP(x, min, max) ((x) < (min) ? (min) : ((x) > (max) ? (max) : (x)))
+
 // bruh.................
 int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow) {
     pxInit();
@@ -16,8 +18,14 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmd
         for (size_t i = 0; i < SCREEN_MAX; i++)
             px(i)->txt = ' ';
         pxInput();
-        if (gDummyX >= 0 && gDummyY >= 0 && gDummyX < gCols && gDummyY < gRows)
-            pxAt(gDummyX, gDummyY)->txt = '@';
+
+        gDummyY += kDown(KP_2) - kDown(KP_8);
+        gDummyY = CLAMP(gDummyY, 0, gRows);
+        gDummyX += kDown(KP_6) - kDown(KP_4);
+        gDummyX = CLAMP(gDummyX, 0, gCols);
+
+        pxAt(gDummyX, gDummyY)->txt = '@';
+        pxAt(gDummyX, gDummyY)->fg = C_BRIGHT_WHITE;
 
         pxCommit();
 
