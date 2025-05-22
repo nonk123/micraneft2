@@ -2,18 +2,22 @@
 
 #include "clock.h"
 #include "g.h"
+#include "log.h"
 #include "screen.h"
 
 #define CLAMP(x, min, max) ((x) < (min) ? (min) : ((x) > (max) ? (max) : (x)))
 
 // bruh.................
 int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow) {
-    pxInit();
+    logInit();
     clockInit();
+    pxInit();
+
+    Info("Ready to rock!");
 
     int fpsCounter = 0, second = 0;
-
     instant lastFrame = elapsed();
+
     while (!gExit) {
         for (size_t i = 0; i < SCREEN_MAX; i++)
             px(i)->txt = ' ';
@@ -46,7 +50,9 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmd
         }
     }
 
+    Info("Goodbye!");
     pxCleanup();
+    logCleanup();
 
     return 0;
 }
