@@ -35,7 +35,7 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmd
             mcSleep(((target - delta) * 1000) / CLOCK_RES);
             delta = target;
         }
-        lastFrame = curFrame;
+        lastFrame += delta;
         fpsCounter++;
 
         second += delta;
