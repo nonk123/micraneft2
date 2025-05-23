@@ -40,10 +40,9 @@ static void clearFbuf() {
 
 static void trashBbuf() {
     for (size_t i = 0; i < SCREEN_MAX; i++) {
-        // deliberate junk
-        bBuf[i].txt = 69;
-        bBuf[i].fg = 4;
-        bBuf[i].bg = 2;
+        bBuf[i].txt = 0;
+        bBuf[i].fg = C_GRAY;
+        bBuf[i].bg = C_BLACK;
     }
 }
 
