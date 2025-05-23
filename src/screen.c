@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 #include "g.h"
+#include "log.h"
 #include "screen.h"
 
 #define KBD_SIZE (32 / sizeof(uint32_t))
@@ -119,7 +120,7 @@ static void displayFPS() {
 
 void pxCommit() {
     if (stdInput == NULL)
-        printf("YOU FORGOT TO CALL `pxInit()` BITCHASS!!!");
+        Fatal("YOU FORGOT TO CALL `pxInit()` BITCHASS!!!");
 
     SetConsoleTitle(title);
 
