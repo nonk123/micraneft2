@@ -6,10 +6,10 @@
 #include "screen.h"
 #include "terrain.h"
 
-#define GEN_NOISE_WIDTH_0 (256)
+#define GEN_NOISE_WIDTH_0 (297)
 #define GEN_NOISE_WIDTH_1 (217)
 #define GEN_FLATBED (128)
-#define GEN_SLOPE (256)
+#define GEN_SLOPE (369)
 
 static struct osn_context* noiseCtx = NULL;
 

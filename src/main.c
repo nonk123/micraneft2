@@ -9,8 +9,6 @@
 #include "screen.h"
 #include "terrain.h"
 
-#define CLAMP(x, min, max) ((x) < (min) ? (min) : ((x) > (max) ? (max) : (x)))
-
 // bruh.................
 int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow) {
     srand(time(NULL));

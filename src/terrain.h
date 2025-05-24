@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 #define CHUNK_WIDTH (32)
-#define WORLD_WIDTH (2048)
+#define WORLD_WIDTH (8 * 1024)
 #define WORLD_HEIGHT (512)
 #define VIEW_RADIUS (128)
 

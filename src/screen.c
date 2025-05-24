@@ -107,7 +107,7 @@ static int pxsSame(struct pixel a, struct pixel b) {
 static void displayFPS() {
 #define BUF_MAX (512)
     static char buf[BUF_MAX] = {0};
-    sprintf(buf, "%d (%dx%d)", gCurFPS, gRows, gCols);
+    sprintf(buf, "FPS: %d (%dx%d)", gCurFPS, gRows, gCols);
     const int top = gRows - 1;
     for (size_t i = 0; i < BUF_MAX; i++) {
         if (buf[i] && i < gCols) {
