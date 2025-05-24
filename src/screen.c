@@ -25,6 +25,7 @@ static void updateDimensions() {
 }
 
 static void cursorTo(int x, int y) {
+    y = gRows - y - 1; // +Y up because reasons...
     if (lastY != y || lastX != x - 1)
         SetConsoleCursorPosition(stdOutput, (COORD){.X = x, .Y = y});
     lastX = x;
@@ -107,11 +108,12 @@ static void displayFPS() {
 #define BUF_MAX (512)
     static char buf[BUF_MAX] = {0};
     sprintf(buf, "%d (%dx%d)", gCurFPS, gRows, gCols);
+    const int top = gRows - 1;
     for (size_t i = 0; i < BUF_MAX; i++) {
         if (buf[i] && i < gCols) {
-            pxAt(i, 0)->txt = buf[i];
-            pxAt(i, 0)->bg = C_BLACK;
-            pxAt(i, 0)->fg = C_WHITE;
+            pxAt(i, top)->txt = buf[i];
+            pxAt(i, top)->bg = C_BLACK;
+            pxAt(i, top)->fg = C_WHITE;
         }
         buf[i] = 0;
     }

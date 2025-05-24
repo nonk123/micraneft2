@@ -1,17 +1,24 @@
+#include <stdlib.h>
+#include <time.h>
+
 #include <windows.h>
 
 #include "clock.h"
 #include "g.h"
 #include "log.h"
 #include "screen.h"
+#include "terrain.h"
 
 #define CLAMP(x, min, max) ((x) < (min) ? (min) : ((x) > (max) ? (max) : (x)))
 
 // bruh.................
 int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow) {
+    srand(time(NULL));
+
     logInit();
     clockInit();
     pxInit();
+    tInit();
 
     Info("Ready to rock!");
 
@@ -23,14 +30,11 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmd
             px(i)->txt = ' ';
         pxInput();
 
-        gDummyY += kDown(KP_2) - kDown(KP_8);
-        gDummyY = CLAMP(gDummyY, 0, gRows - 1);
+        gDummyY += kDown(KP_8) - kDown(KP_2);
         gDummyX += kDown(KP_6) - kDown(KP_4);
-        gDummyX = CLAMP(gDummyX, 0, gCols - 1);
+        tUpdate();
 
-        pxAt(gDummyX, gDummyY)->txt = '@';
-        pxAt(gDummyX, gDummyY)->fg = C_BRIGHT_WHITE;
-
+        tDraw();
         pxCommit();
 
         instant curFrame = elapsed(), delta = curFrame - lastFrame;
@@ -51,6 +55,7 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmd
     }
 
     Info("Goodbye!");
+    tCleanup();
     pxCleanup();
     logCleanup();
 
